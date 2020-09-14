@@ -53,7 +53,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-const isProduction = process.env.PRODUCTION === "true";
+const isProduction = process.env.DEPLOYMENT === "true";
 
 console.log("isProduction === ", isProduction);
 if (isProduction) {
