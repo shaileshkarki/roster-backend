@@ -4,7 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
-
+require("dotenv").config();
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var staffRouter = require("./routes/staff");
@@ -52,7 +52,13 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "build")));
+
+const isProduction = process.env.PRODUCTION === "true";
+
+console.log("isProduction === ", isProduction);
+if (isProduction) {
+  app.use(express.static(path.join(__dirname, "build")));
+}
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -63,9 +69,12 @@ app.use("/pubholidays", publicholidaysRouter);
 app.use("/groups", groupsRouter);
 app.use("/roster", rosterRouter);
 app.use("/wages1", wagesRouter); //02/09: GJ Added this router
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+
+if (isProduction) {
+  app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+  });
+}
 // before using this one
 // +app.get("/*", function (req, res) {
 //   res.sendFile(path.join(__dirname, "build", "index.html"));
