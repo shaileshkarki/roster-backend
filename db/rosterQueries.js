@@ -50,13 +50,14 @@ const getRoster = async (roster_id = 1) => {
           Number(row.timeslot_to) * 1000
         );
         shift["break_length"] = calculateBreak(
-          row.timeslot_from,
-          row.timeslot_to
+          row.timeslot_from * 1000,
+          row.timeslot_to * 1000
         );
         shift["shift_duration"] = calculateShiftDurationExcludingBreak(
           row.timeslot_from * 1000,
           row.timeslot_to * 1000
         );
+        console.log("break: ", shift["break_length"]);
         shift["week_start"] = row.start_date;
         shift["week_end"] = row.end_date;
         shift["username"] = row.username;
